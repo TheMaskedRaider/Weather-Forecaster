@@ -13,7 +13,10 @@ var currentCity = "Los Angeles";
 var citySearchedList = [];
 
 
-//load list of previous cities searched
+//load previous city searched
+function loadCity(){
+    currentCity = localStorage.getItem("lastcity");  
+}
 
 
 //accept user input for city
@@ -32,7 +35,6 @@ function testWeather(cityID) {
         //fetch weather api and confirm that response is good
         .then(function (response) {
             console.log("success")
-            console.log(response)
             return response.json();
         })
         .then(function (data) {
@@ -49,7 +51,7 @@ function testWeather(cityID) {
             console.log(coordinates)
             console.log(coordinates.lat)
             var oneClickUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + coordinates.lat + "&lon=" + coordinates.lon + "&exclude=minutely,hourly,alerts&appid=" + key;
-            console.log(oneClickUrl);
+           
 
             fetch(oneClickUrl)
 
@@ -83,7 +85,7 @@ function testWeather(cityID) {
                     todayDateEl.innerHTML = new Date(data2.daily[0].dt * 1000);
                 })
 
-
+                localStorage.setItem("lastcity", currentCity);
 
 
         })
@@ -96,7 +98,7 @@ function testWeather(cityID) {
 
 }
 
-
+loadCity();
 testWeather(currentCity);
 //on click of search button, clear previous weather display for new and add new
 searchButton.addEventListener("click", changeCity)
